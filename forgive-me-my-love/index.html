@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minik Prensesime</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      background: linear-gradient(135deg, #1e0033, #4b0082, #ff69b4);
+      font-family: 'Courier New', monospace;
+      color: white;
+      overflow: hidden;
+    }
+
+    #asciiHeart {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 16px;
+      white-space: pre;
+      text-align: center;
+      line-height: 1.2;
+      text-shadow: 0 0 5px #ff69b4, 0 0 10px #ff1493;
+      opacity: 1;
+      transition: opacity 2s ease;
+    }
+
+    #asciiHeart img {
+      width: 130px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+      box-shadow: 0 0 15px #ff69b4;
+      border: 3px solid white;
+    }
+
+    #mainContent {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      padding: 20px;
+      animation: fadeIn 2s ease forwards;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px #fff, 0 0 20px pink;
+    }
+
+    .question {
+      font-size: 2em;
+      margin-bottom: 30px;
+      text-shadow: 0 0 5px #fff;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 30px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      background: #ff1493;
+      color: white;
+      box-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      background: #ff69b4;
+    }
+
+    #noBtn {
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .heart-anim {
+      position: fixed;
+      font-size: 30px;
+      animation: floatUp 4s linear infinite;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-200px);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="asciiHeart">
+    <img src="kizin-fotografi.jpg" alt="Minik Prensesim">
+  </div>
+
+  <div id="mainContent">
+    <h1>Minik Prensesime</h1>
+    <div class="question">Affettin mi beni?</div>
+    <div class="buttons">
+      <button onclick="showLove()">Evet</button>
+      <button id="noBtn">Hayır</button>
+    </div>
+  </div>
+
+  <script>
+    const ascii = document.getElementById("asciiHeart");
+    const mainContent = document.getElementById("mainContent");
+    const noBtn = document.getElementById("noBtn");
+
+    const heartFrame = [
+      "      **     **      ",
+      "    ****** ******    ",
+      "  ***************  ",
+      " ******************* ",
+      " ******************* ",
+      "  *****************  ",
+      "   ***************   ",
+      "     ***********     ",
+      "       *******       ",
+      "        *****        ",
+      "         ***         ",
+      "          *          "
+    ];
+
+    let currentRow = 0;
+    function animateHeart() {
+      if (currentRow < heartFrame.length) {
+        ascii.innerHTML += heartFrame[currentRow] + "<br>";
+        currentRow++;
+        setTimeout(animateHeart, 100);
+      } else {
+        setTimeout(() => {
+          ascii.style.opacity = 0;
+          setTimeout(() => {
+            ascii.style.display = "none";
+            mainContent.style.display = "flex";
+          }, 2000);
+        }, 1000);
+      }
+    }
+
+    animateHeart();
+
+    // Kaçan Hayır Butonu
+    let noHovered = false;
+    noBtn.addEventListener('mouseenter', () => {
+      if (!noHovered) {
+        noHovered = true;
+        return;
+      }
+      const padding = 60;
+      const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+      const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = `${randomX}px`;
+      noBtn.style.top = `${randomY}px`;
+    });
+
+    function showLove() {
+      Swal.fire({
+        title: 'Seni çok ama çok seviyorum! 💕',
+        html: '<div style="font-size: 30px;">❤️ 💖 💕 💞 💘</div>',
+        icon: 'success',
+        confirmButtonText: 'Ben de seni! 💋',
+        background: '#1e0033',
+        color: '#fff',
+        didOpen: () => {
+          spawnHearts();
+        }
+      });
+    }
+
+    function spawnHearts() {
+      for (let i = 0; i < 20; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart-anim";
+        heart.textContent = ["❤️", "💖", "💕", "💞", "💘"][Math.floor(Math.random() * 5)];
+        heart.style.left = Math.random() * 100 + "%";
+        heart.style.bottom = "0px";
+        document.body.appendChild(heart);
+        setTimeout(() => document.body.removeChild(heart), 4000);
+      }
+    }
+  </script>
+</body>
+</html>
