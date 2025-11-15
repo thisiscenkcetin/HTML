@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana Bir Mesajım Var 💌</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            opacity: 0.6;
+            animation: float 8s infinite ease-in;
+        }
+
+        @keyframes float {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Başlangıç Ekranı */
+        .start-screen {
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .envelope {
+            width: 200px;
+            height: 150px;
+            margin: 0 auto 40px;
+            cursor: pointer;
+            position: relative;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+        }
+
+        .envelope:hover {
+            transform: scale(1.05) rotateY(-10deg);
+        }
+
+        .envelope-back {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .envelope-back::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+        }
+
+        .envelope-seal {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2em;
+            margin-bottom: 50px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        button {
+            border: none;
+            padding: 16px 40px;
+            font-size: 1.05em;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: transparent;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Mektup Ekranı */
+        .letter-screen {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .letter-wrapper {
+            perspective: 1000px;
+        }
+
+        .letter-container {
+            background: linear-gradient(135deg, #fef5e7 0%, #fdebd0 100%);
+            border: 3px solid #8b6f47;
+            border-radius: 8px;
+            padding: 60px 50px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+            min-height: 500px;
+        }
+
+        .letter-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 3px,
+                    rgba(139, 111, 71, 0.02) 3px,
+                    rgba(139, 111, 71, 0.02) 6px
+                ),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 1px,
+                    rgba(139, 111, 71, 0.02) 1px,
+                    rgba(139, 111, 71, 0.02) 2px
+                );
+            pointer-events: none;
+        }
+
+        .letter-content {
+            position: relative;
+            z-index: 1;
+            color: #2c3e50;
+            font-family: 'Georgia', serif;
+            line-height: 2;
+            font-size: 1.1em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            text-align: center;
+            letter-spacing: 0.5px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .heart-decoration {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            animation: heartBeat 1.5s infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .letter-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .letter-actions button {
+            padding: 12px 30px;
+            font-size: 0.95em;
+        }
+
+        /* Form Ekranı */
+        .form-screen {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-container h2 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2em;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-weight: bold;
+            font-size: 1.05em;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .form-actions button {
+            flex: 1;
+            padding: 15px;
+        }
+
+        .error {
+            background: #ffe6e6;
+            color: #c0392b;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #e74c3c;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0;
+            }
+            to { 
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .letter-container {
+                padding: 40px 25px;
+            }
+
+            button {
+                padding: 14px 25px;
+                font-size: 0.95em;
+            }
+
+            .form-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <div class="container">
+        <!-- Başlangıç Ekranı -->
+        <div id="startScreen" class="start-screen">
+            <div class="envelope" onclick="openDefaultLetter()">
+                <div class="envelope-back">
+                    <div class="envelope-seal">💌</div>
+                </div>
+            </div>
+            
+            <h1>Sana Bir Mesajım Var</h1>
+            <p class="subtitle">Mektupunuzu açmak için tıklayın...</p>
+            
+            <div class="button-group">
+                <button class="btn-primary" onclick="openDefaultLetter()">
+                    ❤️ Mektup Aç
+                </button>
+                <button class="btn-secondary" onclick="showCustomForm()">
+                    ✨ Kişisel Mesaj Oluştur
+                </button>
+            </div>
+        </div>
+
+        <!-- Mektup Ekranı -->
+        <div id="letterScreen" class="letter-screen hidden">
+            <div class="letter-wrapper">
+                <div class="letter-container">
+                    <div class="heart-decoration">💕</div>
+                    <div class="letter-content" id="letterContent"></div>
+                </div>
+            </div>
+            
+            <div class="letter-actions">
+                <button class="btn-secondary" onclick="backToStart()">← Kapat</button>
+                <button class="btn-primary" onclick="showCustomForm()">✨ Başka Mesaj</button>
+            </div>
+        </div>
+
+        <!-- Form Ekranı -->
+        <div id="formScreen" class="form-screen hidden">
+            <div class="form-container">
+                <h2>💌 Kişisel Mektup Oluştur</h2>
+                
+                <div id="errorMessage" class="error"></div>
+
+                <div class="form-group">
+                    <label for="recipient">Sevgilinin Adı</label>
+                    <input type="text" id="recipient" placeholder="Sevgilinin adı" value="Sevgilim">
+                </div>
+
+                <div class="form-group">
+                    <label for="sender">Senin Adın</label>
+                    <input type="text" id="sender" placeholder="Senin adın" value="Ben">
+                </div>
+
+                <div class="form-group">
+                    <label for="customMessage">Mesajın Ana Konusu</label>
+                    <textarea id="customMessage" placeholder="Ör: Onunla geçirdiğim güzel anılar, onun bana kattığı değer, gelecek hayallerimiz..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn-primary" id="generateBtn" onclick="generateCustomMessage()">
+                        🎨 Mektup Oluştur
+                    </button>
+                    <button class="btn-secondary" onclick="backToStart()">
+                        ✕ İptal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Uçan kalplar animasyonu
+        function createFloatingHearts() {
+            const container = document.getElementById('floatingHearts');
+            const hearts = ['💕', '❤️', '💖', '💗', '💝'];
+            
+            for (let i = 0; i < 8; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.animationDuration = (Math.random() * 5 + 8) + 's';
+                container.appendChild(heart);
+            }
+        }
+
+        // Varsayılan mektuplar
+        const DEFAULT_MESSAGES = [
+            `Sevgili {recipient},
+
+Seni gördüğüm ilk günden beri hayatım tamamen değişti. Her sabah senin yüzünü görmek, 
+her gece seninle konuşmak benim günümü tamamlayan şey.
+
+Seninle geçirdiğim her an benim için bir hazine. Senin gülüşün, senin ses tonun, 
+senin her hareketi beni daha çok sana yaklaştırıyor.
+
+Sana söylemek istediğim şey çok basit: Seni çok seviyorum. Seninle bir gelecek 
+hayal etmek benim için en güzel düşü.
+
+Her zaman yanında olacağım, her adımında seninle yürüyeceğim.
+
+Seninle sonsuza dek...
+
+{sender}`,
+
+            `Sevgili {recipient},
+
+Bu mektup sana bir gün yanağındaki o tebessümü nasıl kaybetsem korkan, 
+seninle her anı yakalamak isteyen biri tarafından yazılıyor.
+
+Seninle birlikte yaşadığımız anıların her biri benim kalbimde yazılı. 
+Birlikte güldüğümüz, ağladığımız, hayalleri kurduğumuz her an bana değer verdi.
+
+Hayatımda seninle olmak kadar doğru hiçbir şey yok. Sen benim ilham kaynağım, 
+benim gücüm, benim umudum.
+
+Seni sevgim, ışık hızı kadar hızlı, okyanuslar kadar derin, gökyüzü kadar sonsuz.
+
+Seninle olmak için doğdum.
+
+Sonsuz sevgiyle,
+{sender}`
+        ];
+
+        function showScreen(screenId) {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('letterScreen').classList.add('hidden');
+            document.getElementById('formScreen').classList.add('hidden');
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function openDefaultLetter() {
+            const recipient = document.getElementById('recipient')?.value || 'Sevgilim';
+            const sender = document.getElementById('sender')?.value || 'Ben';
+            const message = DEFAULT_MESSAGES[0]
+                .replace('{recipient}', recipient)
+                .replace('{sender}', sender);
+            
+            document.getElementById('letterContent').textContent = message;
+            showScreen('letterScreen');
+        }
+
+        function showCustomForm() {
+            showScreen('formScreen');
+            document.getElementById('errorMessage').classList.remove('show');
+        }
+
+        function generateCustomMessage() {
+            const recipient = document.getElementById('recipient').value;
+            const sender = document.getElementById('sender').value;
+            const customMessage = document.getElementById('customMessage').value;
+            const btn = document.getElementById('generateBtn');
+            const errorDiv = document.getElementById('errorMessage');
+
+            if (!customMessage.trim()) {
+                errorDiv.textContent = '⚠️ Lütfen bir mesaj yazınız!';
+                errorDiv.classList.add('show');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Mektup Yazılıyor...';
+
+            // Şimdilik hazır mesajlardan birini kullan
+            setTimeout(() => {
+                const message = DEFAULT_MESSAGES[Math.floor(Math.random() * DEFAULT_MESSAGES.length)]
+                    .replace('{recipient}', recipient)
+                    .replace('{sender}', sender);
+                
+                document.getElementById('letterContent').textContent = message;
+                showScreen('letterScreen');
+                btn.disabled = false;
+                btn.innerHTML = '🎨 Mektup Oluştur';
+            }, 1500);
+        }
+
+        function backToStart() {
+            document.getElementById('customMessage').value = '';
+            document.getElementById('recipient').value = 'Sevgilim';
+            document.getElementById('sender').value = 'Ben';
+            showScreen('startScreen');
+        }
+
+        // Sayfa yüklendiğinde çalıştır
+        window.addEventListener('load', createFloatingHearts);
+    </script>
+</body>
+</html>
